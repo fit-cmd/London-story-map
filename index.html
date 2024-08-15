@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>London Parks Story Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 600px; }
+        #controls { margin: 20px; }
+        button { margin: 5px; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <button onclick="showPark('hydePark')">Hyde Park</button>
+        <button onclick="showPark('regentsPark')">Regent's Park</button>
+        <button onclick="showPark('greenwichPark')">Greenwich Park</button>
+        <button onclick="showPark('richmondPark')">Richmond Park</button>
+        <button onclick="showPark('stJamesPark')">St. James's Park</button>
+    </div>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([51.5074, -0.1278], 12); // Centered on London
+
+        // Add a custom tile layer
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors & CartoDB'
+        }).addTo(map);
+
+        // Define park data
+        var parks = {
+            hydePark: {
+                lat: 51.507268,
+                lon: -0.165730,
+                title: 'Hyde Park',
+                description: 'One of the largest parks in London, famous for its Speakers\' Corner.'
+            },
+            regentsPark: {
+                lat: 51.531270,
+                lon: -0.156969,
+                title: 'Regent\'s Park',
+                description: 'A Royal Park featuring the London Zoo and an open-air theatre.'
+            },
+            greenwichPark: {
+                lat: 51.476891,
+                lon: 0.000500,
+                title: 'Greenwich Park',
+                description: 'A historic park with beautiful views, home to the Prime Meridian line.'
+            },
+            richmondPark: {
+                lat: 51.442627,
+                lon: -0.273043,
+                title: 'Richmond Park',
+                description: 'The largest of London\'s Royal Parks, known for its deer herds.'
+            },
+            stJamesPark: {
+                lat: 51.502103,
+                lon: -0.134351,
+                title: 'St. James\'s Park',
+                description: 'A picturesque park in central London, near Buckingham Palace.'
+            }
+        };
+
+        // Custom icon for parks
+        var parkIcon = L.icon({
+            iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png', // Default Leaflet icon for testing
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34]
+        });
+
+        // Function to display a park
+        function showPark(parkKey) {
+            var park = parks[parkKey];
+            if (park) {
+                L.marker([park.lat, park.lon], { icon: parkIcon })
+                    .addTo(map)
+                    .bindPopup('<b>' + park.title + '</b><br>' + park.description)
+                    .openPopup();
+                map.setView([park.lat, park.lon], 14);
+            }
+        }
+
+        // Optionally, automatically show the first park on load
+        showPark('hydePark');
+    </script>
+</body>
+</html>
